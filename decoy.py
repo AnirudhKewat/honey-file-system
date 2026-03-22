@@ -1,3 +1,3 @@
-def activate_decoy():
+def access_decoy():
 
-    print("Decoy activated — attacker misled.")
+    print("Decoy file opened")

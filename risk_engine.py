@@ -1,14 +1,9 @@
-import face_auth
+def calculate_risk(is_admin):
 
+    if is_admin:
 
-def calculate_risk():
-
-    authorized = face_auth.verify()
-
-    if authorized:
-
-        return 1
+        return "LOW"
 
     else:
 
-        return 10
+        return "HIGH"

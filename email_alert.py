@@ -1,3 +1,3 @@
-def send_alert(message):
+def send_alert():
 
-    print("ALERT:", message)
+    print("ALERT: Intruder detected 🚨")

@@ -1,6 +1,8 @@
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import time
+import os
+
 from face_auth import check_admin_face
 import database
 from email_alert import send_alert
@@ -22,31 +24,53 @@ class HoneyFileHandler(FileSystemEventHandler):
 
         if is_admin:
 
-            print("Admin detected")
+            print("Admin detected ✅")
 
-            database.insert_log(event.src_path, "Admin")
+            database.insert_log(
+                event.src_path,
+                "Admin"
+            )
 
         else:
 
-            print("Intruder detected")
+            print("Intruder detected 🚨")
 
-            database.insert_log(event.src_path, "Intruder")
+            database.insert_log(
+                event.src_path,
+                "Intruder"
+            )
 
-            send_alert("Intruder opened honeyfile!")
+            send_alert()
 
 
 if __name__ == "__main__":
 
+    if not os.path.exists(WATCH_FOLDER):
+
+        print("Creating honeyfiles folder...")
+
+        os.mkdir(WATCH_FOLDER)
+
+
+    database.init_db()
+
+
     observer = Observer()
 
-    observer.schedule(HoneyFileHandler(), WATCH_FOLDER, recursive=False)
+    observer.schedule(
+        HoneyFileHandler(),
+        WATCH_FOLDER,
+        recursive=False
+    )
 
     observer.start()
 
-    print("Monitoring honeyfiles...")
+    print("Monitoring honeyfiles... system active ✅")
 
     try:
+
         while True:
+
             time.sleep(1)
 
     except KeyboardInterrupt:

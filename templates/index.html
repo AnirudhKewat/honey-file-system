@@ -1,7 +1,11 @@
 <!DOCTYPE html>
+
 <html>
+
 <head>
-    <title>Honeyfile Security Dashboard</title>
+
+<title>Honeyfile Logs</title>
+
 </head>
 
 <body>
@@ -11,17 +15,25 @@
 <table border="1">
 
 <tr>
+
 <th>ID</th>
-<th>File</th>
-<th>User</th>
+
+<th>Event</th>
+
+<th>Risk</th>
+
 </tr>
 
 {% for log in logs %}
 
 <tr>
+
 <td>{{log[0]}}</td>
+
 <td>{{log[1]}}</td>
+
 <td>{{log[2]}}</td>
+
 </tr>
 
 {% endfor %}
@@ -29,4 +41,5 @@
 </table>
 
 </body>
+
 </html>

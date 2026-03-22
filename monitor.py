@@ -6,7 +6,7 @@ import os
 from face_auth import check_admin_face
 import database
 from email_alert import send_alert
-
+from camera import capture_intruder
 
 WATCH_FOLDER = "honeyfiles"
 

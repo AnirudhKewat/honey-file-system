@@ -8,45 +8,49 @@ def check_admin_face():
 
     print("Checking admin authentication...")
 
-    # Get correct path of admin image
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     admin_path = os.path.join(BASE_DIR, "faces", "admin.jpg")
 
-    # Load admin image
-    admin_image = face_recognition.load_image_file(admin_path)
+    if not os.path.exists(admin_path):
+        print("admin.jpg missing ❌")
+        return False
+
+    # ✅ Load admin image using OpenCV instead of face_recognition
+    admin_image = cv2.imread(admin_path)
+
+    if admin_image is None:
+        print("Failed to load admin.jpg ❌")
+        return False
+
+    # Convert BGR → RGB
+    admin_image = cv2.cvtColor(admin_image, cv2.COLOR_BGR2RGB)
 
     admin_encodings = face_recognition.face_encodings(admin_image)
 
     if len(admin_encodings) == 0:
-        print("No face found in admin.jpg ❌")
+        print("No face found inside admin.jpg ❌")
         return False
 
     admin_encoding = admin_encodings[0]
 
-    # Start camera
-    cam = cv2.VideoCapture(0)
+    # Start webcam
+    cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
     ret, frame = cam.read()
 
     cam.release()
 
     if not ret:
-        print("Camera not working ❌")
+        print("Camera failed ❌")
         return False
 
-    try:
-        # Convert BGR → RGB (VERY IMPORTANT FIX)
-        rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    # Convert camera frame
+    rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-    except:
-        print("Frame conversion failed ❌")
-        return False
-
-    # Detect faces
     face_locations = face_recognition.face_locations(rgb_frame)
 
     if len(face_locations) == 0:
-        print("No face detected from camera ❌")
+        print("No face detected ❌")
         capture_intruder()
         return False
 
@@ -71,6 +75,5 @@ def check_admin_face():
     return False
 
 
-# Run standalone test
 if __name__ == "__main__":
     check_admin_face()

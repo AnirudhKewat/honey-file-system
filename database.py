@@ -1,51 +1,40 @@
 import sqlite3
-
-DB_NAME = "logs.db"
+from datetime import datetime
 
 
 def init_db():
 
-    conn = sqlite3.connect(DB_NAME)
+    conn = sqlite3.connect("logs.db")
 
-    cur = conn.cursor()
+    cursor = conn.cursor()
 
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS logs (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            event TEXT,
-            risk TEXT
-        )
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS access_logs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        file TEXT,
+        user TEXT,
+        time TEXT
+    )
     """)
 
     conn.commit()
+
     conn.close()
 
 
-def insert_log(event, risk):
+def insert_log(file, user):
 
-    conn = sqlite3.connect(DB_NAME)
+    conn = sqlite3.connect("logs.db")
 
-    cur = conn.cursor()
+    cursor = conn.cursor()
 
-    cur.execute(
-        "INSERT INTO logs (event, risk) VALUES (?, ?)",
-        (event, risk)
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    cursor.execute(
+        "INSERT INTO access_logs (file, user, time) VALUES (?, ?, ?)",
+        (file, user, timestamp)
     )
 
     conn.commit()
-    conn.close()
-
-
-def fetch_logs():
-
-    conn = sqlite3.connect(DB_NAME)
-
-    cur = conn.cursor()
-
-    cur.execute("SELECT * FROM logs")
-
-    rows = cur.fetchall()
 
     conn.close()
-
-    return rows

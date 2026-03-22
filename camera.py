@@ -5,36 +5,25 @@ from datetime import datetime
 
 def capture_intruder():
 
-    print("Opening camera...")
-
     if not os.path.exists("captured"):
-
         os.mkdir("captured")
 
-    cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-
-    if not cam.isOpened():
-
-        print("Camera error ❌")
-
-        return False
+    cam = cv2.VideoCapture(0)
 
     ret, frame = cam.read()
 
     cam.release()
 
-    if not ret:
+    if ret:
 
-        print("Capture failed ❌")
+        filename = datetime.now().strftime("%Y%m%d_%H%M%S.jpg")
 
-        return False
+        filepath = os.path.join("captured", filename)
 
-    filename = datetime.now().strftime("%Y%m%d_%H%M%S.jpg")
+        cv2.imwrite(filepath, frame)
 
-    path = os.path.join("captured", filename)
+        print("Intruder image saved:", filepath)
 
-    cv2.imwrite(path, frame)
+        return filepath
 
-    print("Intruder captured ✅")
-
-    return True
+    return None

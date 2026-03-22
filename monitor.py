@@ -39,8 +39,12 @@ class HoneyFileHandler(FileSystemEventHandler):
                 event.src_path,
                 "Intruder"
             )
+            image_path = capture_intruder()
 
-            send_alert()
+            send_alert(
+        "Intruder opened honeyfile!",
+        image_path
+    )
 
 
 if __name__ == "__main__":
